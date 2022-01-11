@@ -1,0 +1,13 @@
+
+import { combineReducers } from "redux";
+import { calendarReducer } from "./calendarReducer";
+import { uiReducer } from "./uiReducer";
+
+
+
+/* Este rootReducer es el reducer PADRE que combinará el resto de los reducers */
+export const rootReducer = combineReducers({
+    ui:uiReducer, // my firt reducer
+    calendar: calendarReducer,
+    //TODO: AutRducer
+});
