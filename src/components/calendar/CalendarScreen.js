@@ -11,9 +11,10 @@ import { Navbar } from '../ui/Navbar';
 import { CalendarEvent } from './CalendarEvent';
 import { CalendarModal } from './CalendarModal';
 import { uiOpenModal } from '../../actions/ui';
-import { eventAddNew, eventSetActive } from '../../actions/events';
+import { eventAddNew, eventClearNoteEvent, eventSetActive } from '../../actions/events';
 import { AddNewFab } from '../ui/AddNewFab';
 import { useSelector } from 'react-redux';
+import { DeleteEventFab } from '../ui/DeleteEventFab';
 
 const localizer = momentLocalizer(moment); // se inicializa el localizer
 moment.locale('es'); // establezco el idioma de preferencia
@@ -35,7 +36,7 @@ export const CalendarScreen = () => {
 
     const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'month');
     const dispatchCalendar = useDispatch();
-    const { events} = useSelector(state => state.calendar)
+    const { events, activeEvent } = useSelector(state => state.calendar)
 
     const onDoubleClick = (e) => {
         console.log(e);
@@ -43,6 +44,7 @@ export const CalendarScreen = () => {
     }
     
     const onSelectEvent = (e) => {
+        // console.log("evento en el calendario")
         dispatchCalendar( eventSetActive(e) );
     }
 
@@ -70,6 +72,12 @@ export const CalendarScreen = () => {
         }
     }
 
+    const onSelectSlot = (e) => {
+        // console.log(e);
+        dispatchCalendar( eventClearNoteEvent() )
+
+    }
+
 
 
     return (
@@ -87,6 +95,8 @@ export const CalendarScreen = () => {
                 onSelectEvent = { onSelectEvent } // se dispara cada que selecciono un evento en el calendario
                 onView = { onViewChange } //  este evento se disparará cuando de click en los botones Mes/Semana/Día/Agenda
                 view = { lastView } // para conservar la vista actual si llegase a recargar la app, es decir, si estoy en la vista de agenda y recargo seguiré viendo la vista de agenda
+                onSelectSlot = { onSelectSlot } // es dispara cuando hago click en cualquiera de las celdas de calendario, para que esta funcion se llame  la propiedad selectable = { true } debe estar en true
+                selectable = { true } 
                 components = { {
                         event: CalendarEvent // ojo q no se le pasa el component con < /> como -> <CalendarEvent />, solo se la pasa LA REFERENCIA  al componenete, este ultimo recibe como pros un obj que contiene mucha info, ver el console.log en en la deficion de CalendarEvent
                 } } 
@@ -94,6 +104,10 @@ export const CalendarScreen = () => {
 
 
             <AddNewFab />
+            {
+                activeEvent &&  <DeleteEventFab />
+            }
+           
             <CalendarModal />
         </div>
     )

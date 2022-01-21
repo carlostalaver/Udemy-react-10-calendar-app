@@ -3,6 +3,8 @@ import { Provider }  from 'react-redux';
 import { AppRouter } from './components/router/AppRouter'
 import { store } from './store/store';
 
+console.log('info en .env.development',process.env);
+
 const CalendarApp = () => {
     return (
         <Provider store = { store } >
@@ -25,4 +27,5 @@ export default CalendarApp
     npm i sweetalert2
     npm install react-redux: https://react-redux.js.org/introduction/getting-started
     npm i redux-thunk: https://www.npmjs.com/package/redux-thunk
+    NOTA: cada vez que se haga una modificaion en los archivos .env.xyz se debe bajar y subir nuevamente el servidor para que el entorno pueda reconocer las variables
 */

@@ -5,7 +5,7 @@ import moment from 'moment';
 import Swal from 'sweetalert2';
 import { useSelector, useDispatch } from 'react-redux';
 import { uiCloseModal } from '../../actions/ui';
-import { eventAddNew, eventClearNoteEvent } from '../../actions/events';
+import { eventAddNew, eventClearNoteEvent, eventUpdated } from '../../actions/events';
 /* este componente se creó siguiendo la documentacion de react-modal -> https://www.npmjs.com/package/react-modal#examples */
 const customStyles = {
     content: {
@@ -43,7 +43,9 @@ export const CalendarModal = () => {
 
     useEffect(() => {
         if(activeEvent){
-            setFormValues(activeEvent);
+            setFormValues( activeEvent );
+        } else {
+            setFormValues( initEvent );
         }
     }, [activeEvent, setFormValues])
 
@@ -93,16 +95,20 @@ export const CalendarModal = () => {
         }
 
         // TODO: save in BBDD
-        dispatchCalendarModal(eventAddNew(
-            {
-                ...formValues,
-                id: new Date().getTime(),
-                user: {
-                    _id: 12,
-                    name: 'Carlos'
+        if(activeEvent){
+            dispatchCalendarModal( eventUpdated( formValues ) );
+        } else {
+            dispatchCalendarModal( eventAddNew(
+                {
+                    ...formValues,
+                    id: new Date().getTime(),
+                    user: {
+                        _id: 12,
+                        name: 'Carlos'
+                    }
                 }
-            }
-        ))
+            ))
+        }
 
         setTitleValid(true);
         closeModal();
@@ -120,7 +126,7 @@ export const CalendarModal = () => {
             className = "modal"
             overlayClassName = "modal-fondo"
         >
-            <h1> Nuevo evento </h1>
+            <h1> { (activeEvent) ? 'Editar evento' : 'Nuevo evento' }  </h1>
             <hr />
             <form className="container"
                 onSubmit ={ handleSubmitForm }

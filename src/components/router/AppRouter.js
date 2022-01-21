@@ -1,14 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch } from 'react-redux';
 import {
     BrowserRouter as Router,
     Switch,
     Route,
     Redirect
 } from "react-router-dom";
+import { startChecking } from '../../actions/auht';
 import { LoginScreen } from '../auth/LoginScreen';
 import { CalendarScreen } from '../calendar/CalendarScreen';
 
 export const AppRouter = () => {
+
+    const dispatch = useDispatch();
+
+    useEffect(()=>{
+        dispatch( startChecking() );
+        console.log("Disparando el estar startChecking");
+    },[dispatch])
+
     return (
         <Router>
             <div>
