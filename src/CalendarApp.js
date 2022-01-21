@@ -28,4 +28,7 @@ export default CalendarApp
     npm install react-redux: https://react-redux.js.org/introduction/getting-started
     npm i redux-thunk: https://www.npmjs.com/package/redux-thunk
     NOTA: cada vez que se haga una modificaion en los archivos .env.xyz se debe bajar y subir nuevamente el servidor para que el entorno pueda reconocer las variables
+    Para iniciar session heroku:
+        1: Para la parte front, generar el build que irá a prod: npm run build 
+        12: heroku --> user cristianmsilvah4356@gmail.com, password el.......2...*
 */
