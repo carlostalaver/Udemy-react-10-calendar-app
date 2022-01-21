@@ -5,7 +5,7 @@ import moment from 'moment';
 import Swal from 'sweetalert2';
 import { useSelector, useDispatch } from 'react-redux';
 import { uiCloseModal } from '../../actions/ui';
-import { eventAddNew, eventClearNoteEvent, eventUpdated } from '../../actions/events';
+import { eventClearNoteEvent, eventStartAddNew, eventStartUpdate } from '../../actions/events';
 /* este componente se creó siguiendo la documentacion de react-modal -> https://www.npmjs.com/package/react-modal#examples */
 const customStyles = {
     content: {
@@ -96,18 +96,9 @@ export const CalendarModal = () => {
 
         // TODO: save in BBDD
         if(activeEvent){
-            dispatchCalendarModal( eventUpdated( formValues ) );
+            dispatchCalendarModal( eventStartUpdate( formValues ) );
         } else {
-            dispatchCalendarModal( eventAddNew(
-                {
-                    ...formValues,
-                    id: new Date().getTime(),
-                    user: {
-                        _id: 12,
-                        name: 'Carlos'
-                    }
-                }
-            ))
+            dispatchCalendarModal( eventStartAddNew( formValues ) );
         }
 
         setTitleValid(true);

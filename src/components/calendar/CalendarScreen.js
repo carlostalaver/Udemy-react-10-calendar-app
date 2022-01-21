@@ -11,10 +11,11 @@ import { Navbar } from '../ui/Navbar';
 import { CalendarEvent } from './CalendarEvent';
 import { CalendarModal } from './CalendarModal';
 import { uiOpenModal } from '../../actions/ui';
-import { eventAddNew, eventClearNoteEvent, eventSetActive } from '../../actions/events';
+import { eventClearNoteEvent, eventSetActive, eventStartLoading } from '../../actions/events';
 import { AddNewFab } from '../ui/AddNewFab';
 import { useSelector } from 'react-redux';
 import { DeleteEventFab } from '../ui/DeleteEventFab';
+import { useEffect } from 'react';
 
 const localizer = momentLocalizer(moment); // se inicializa el localizer
 moment.locale('es'); // establezco el idioma de preferencia
@@ -36,7 +37,13 @@ export const CalendarScreen = () => {
 
     const [lastView, setLastView] = useState(localStorage.getItem('lastView') || 'month');
     const dispatchCalendar = useDispatch();
-    const { events, activeEvent } = useSelector(state => state.calendar)
+    const { events, activeEvent } = useSelector(state => state.calendar);
+    const { uid } = useSelector(state => state.auth);
+
+    useEffect(()=> {
+        dispatchCalendar( eventStartLoading() );
+    }, [dispatchCalendar]);
+
 
     const onDoubleClick = (e) => {
         console.log(e);
@@ -59,8 +66,10 @@ export const CalendarScreen = () => {
 
     const evenStyleGetter = (event, start, end, isSelected) => {
         // console.log(event, start, end, isSelected);
+
+
         const style = {
-            backgroundColor: '#367CF7',
+            backgroundColor: ( uid ===event.user._id ) ? '#367CF7' : '#465660', // si el evento es propio aparecerá en azul, si es ajeno en gris
             borderRadius: '0px',
             opacity: 0.8,
             display: 'block',

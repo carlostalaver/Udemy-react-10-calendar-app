@@ -1,6 +1,7 @@
 import { types } from "../types/types";
 import Swal from 'sweetalert2';
 import { fetchSinToken, fetchConToken } from '../helpers/fetch' 
+import { eventLogout } from "./events";
 
 
 export const startLogin = (email, password) => {
@@ -63,10 +64,23 @@ export const startChecking = () => {
     }
 }
 
-const checkingFinish = ()=>({ type: types.authCheckingFinish })
+const checkingFinish = ()=>({ type: types.authCheckingFinish });
+
+export const startLogout = () => {
+    return async( dispatch ) => {
+        await localStorage.clear(); // decisidí usar await porq la gestion del localstorage es considerada asincrona
+        dispatch( eventLogout() );
+        dispatch( logout() );
+    }
+}
+
 
 
 const login = ( user ) => ({
     type: types.authLogin,
     payload: user
 });
+
+const logout = () => ({
+    type: types.authLogout
+})
